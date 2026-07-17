@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>SIF-SS // Manual Operativo - Sitio del Suceso (Versión Móvil iPhone / iOS)</title>
+  
+  <!-- Apple iOS PWA Meta Tags -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="SIF-SS iOS">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --bg-main: #0f172a;
+      --bg-card: #1e293b;
+      --bg-input: #334155;
+      --border-color: #475569;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --accent-primary: #38bdf8;
+      --accent-green: #10b981;
+      --accent-warning: #f59e0b;
+      --radius-lg: 12px;
+      --radius-sm: 8px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body {
+      background-color: var(--bg-main);
+      color: var(--text-main);
+      min-height: 100vh;
+      padding-bottom: env(safe-area-inset-bottom, 3rem);
+      background-image: linear-gradient(135deg, var(--bg-main) 0%, rgba(56, 189, 248, 0.08) 50%, var(--bg-main) 100%);
+    }
+
+    .manual-header {
+      background: var(--bg-card);
+      border-bottom: 2px solid var(--border-color);
+      padding: 1.2rem 1.5rem;
+      padding-top: calc(1.2rem + env(safe-area-inset-top, 0px));
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(14px);
+      box-shadow: 0 4px 18px rgba(0, 0, 0, 0.25);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .manual-title {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+    }
+
+    .manual-title h1 {
+      font-size: 1.2rem;
+      font-weight: 800;
+      color: var(--text-main);
+    }
+
+    .btn-back {
+      background: var(--accent-primary);
+      color: #0f172a;
+      text-decoration: none;
+      padding: 0.5rem 1rem;
+      border-radius: var(--radius-sm);
+      font-weight: 700;
+      font-size: 0.85rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: background 0.2s;
+    }
+
+    .btn-back:hover {
+      background: #7dd3fc;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 2rem auto;
+      padding: 0 1.2rem;
+    }
+
+    .section-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 1.8rem;
+      margin-bottom: 1.8rem;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    .section-card h2 {
+      font-size: 1.3rem;
+      font-weight: 800;
+      color: var(--accent-primary);
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 0.6rem;
+    }
+
+    .section-card p {
+      color: var(--text-muted);
+      font-size: 0.94rem;
+      margin-bottom: 1rem;
+    }
+
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.2rem;
+      margin-top: 1.2rem;
+    }
+
+    .feature-item {
+      background: var(--bg-input);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      padding: 1.1rem;
+    }
+
+    .feature-item h3 {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--accent-green);
+      margin-bottom: 0.4rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .feature-item p {
+      font-size: 0.86rem;
+      color: var(--text-main);
+      margin-bottom: 0;
+    }
+
+    .alert-box {
+      background: rgba(56, 189, 248, 0.12);
+      border-left: 4px solid var(--accent-primary);
+      padding: 1rem 1.2rem;
+      border-radius: var(--radius-sm);
+      margin: 1.2rem 0;
+      font-size: 0.9rem;
+      color: var(--text-main);
+    }
+
+    .alert-box.warning {
+      background: rgba(245, 158, 11, 0.12);
+      border-left-color: var(--accent-warning);
+    }
+
+    .steps-list {
+      list-style: none;
+      counter-reset: step-counter;
+      margin: 1rem 0;
+    }
+
+    .steps-list li {
+      counter-increment: step-counter;
+      margin-bottom: 0.8rem;
+      padding-left: 2.2rem;
+      position: relative;
+      font-size: 0.92rem;
+      color: var(--text-main);
+    }
+
+    .steps-list li::before {
+      content: counter(step-counter);
+      position: absolute;
+      left: 0;
+      top: 0;
+      background: var(--accent-primary);
+      color: #0f172a;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      font-weight: 800;
+    }
+
+    .badge {
+      display: inline-block;
+      background: rgba(16, 185, 129, 0.15);
+      color: var(--accent-green);
+      padding: 0.2rem 0.6rem;
+      border-radius: 6px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      margin-right: 0.4rem;
+    }
+  </style>
+</head>
+<body>
+
+  <header class="manual-header">
+    <div class="manual-title">
+      <i class="fa-solid fa-book-journal-whills" style="color: var(--accent-primary); font-size: 1.4rem;"></i>
+      <div>
+        <h1>Manual Operativo SIF-SS (iPhone / iOS)</h1>
+        <p style="font-size: 0.75rem; color: var(--text-muted);">Sistema Integral Forense - Versión Móvil Apple iPhone & iPad</p>
+      </div>
+    </div>
+    <a href="index.html" class="btn-back"><i class="fa-solid fa-arrow-left"></i> Volver a la App</a>
+  </header>
+
+  <main class="container">
+
+    <div class="section-card">
+      <h2><i class="fa-solid fa-shield-halved"></i> 1. Visión del Sistema y Modo Offline (iPhone / iOS)</h2>
+      <p>
+        El <strong>Sistema Integral Forense S.S (SIF-SS)</strong> es una aplicación pericial de vanguardia diseñada para ayudar, simplificar y contribuir al investigador en el Sitio del Suceso en terreno. Operando bajo estándar de <strong>Progressive Web App (PWA) de iOS</strong>, funciona de manera <strong>100% autónoma y sin conexión a internet (Offline)</strong> una vez agregada a su pantalla de inicio.
+      </p>
+      <div class="alert-box">
+        <i class="fa-solid fa-lock" style="color: var(--accent-primary);"></i> <strong>Privacidad Pericial Absoluta en iOS:</strong> Todos los expedientes, croquis anatómicos, fotografías y coordenadas satelitales se resguardan en el almacenamiento local encriptado del iPhone de forma segura. No se sincronizan con servidores externos ni iCloud sin su orden expresa por exportación o respaldo.
+      </div>
+    </div>
+
+    <div class="section-card">
+      <h2><i class="fa-brands fa-apple"></i> 2. Cómo Instalar como App Nativa en iPhone & iPad (Safari)</h2>
+      <p>Para obtener la máxima fluidez a pantalla completa, sin barras de navegación de Safari y con acceso inmediato desde su pantalla inicial:</p>
+      <ul class="steps-list">
+        <li>Abra la aplicación en el navegador oficial <strong>Safari</strong> en su iPhone o iPad.</li>
+        <li>Presione el botón de compartir <strong>Compartir <i class="fa-solid fa-arrow-up-from-bracket"></i></strong> ubicado en la barra inferior de Safari.</li>
+        <li>Deslice el menú hacia arriba y seleccione la opción <strong>"Agregar a inicio" (Add to Home Screen <i class="fa-solid fa-plus-square"></i>)</strong>.</li>
+        <li>Confirme pulsando en <strong>"Agregar"</strong> en la esquina superior derecha. ¡Listo! El ícono pericial de SIF-SS quedará anclado en la pantalla de inicio de su iPhone.</li>
+      </ul>
+    </div>
+
+    <div class="section-card">
+      <h2><i class="fa-solid fa-layer-group"></i> 3. Flujo Operativo por Módulos Periciales</h2>
+      <div class="feature-grid">
+        <div class="feature-item">
+          <h3><i class="fa-solid fa-folder-open"></i> Pestaña 1: Antecedentes</h3>
+          <p>Registro del Número Único de Expediente (NUE / RUC), fiscalía, perito actuante y captura satelital de coordenadas GPS (<span class="badge">Lat/Long</span>) utilizando el sensor de ubicación de Apple iOS.</p>
+        </div>
+        <div class="feature-item">
+          <h3><i class="fa-solid fa-user-doctor"></i> Pestaña 2: Tanatología</h3>
+          <p>Identificación del fallecido y cronotanatodiagnóstico detallado: Rigidez (Rigor Mortis), Livideces (Livor Mortis), temperatura ambiental vs. corporal y signos de putrefacción.</p>
+        </div>
+        <div class="feature-item">
+          <h3><i class="fa-solid fa-shirt"></i> Pestaña 3: Examen Externo y CUNOCO</h3>
+          <p>Inspección por capas de indumentaria, registro de rasgaduras, manchas biológicas, cadena de custodia, y control de expedientes NUE y CUNOCO institucional.</p>
+        </div>
+        <div class="feature-item">
+          <h3><i class="fa-solid fa-crosshairs"></i> Pestaña 4: Fijación Anatómica</h3>
+          <p>Planimetría corporal interactiva optimizada para pantalla táctil Retina. Toca sobre las siluetas anatómicas (frontal, dorsal, laterales) para registrar coordenadas exactas <code>(X, Y)</code>, tipo de lesión y testigo métrico.</p>
+        </div>
+        <div class="feature-item">
+          <h3><i class="fa-solid fa-camera"></i> Pestaña 5: Fotografía Forense</h3>
+          <p>Captura en terreno con la cámara del iPhone o adjunte imágenes desde la Fototeca/Archivos. Foliado automático y rotulado forense de cada evidencia gráfica.</p>
+        </div>
+        <div class="feature-item">
+          <h3><i class="fa-solid fa-file-export"></i> Pestaña 6: Informe Oficial</h3>
+          <p>Compilación del documento oficial institucional en mayúsculas. Exportación directa a <strong>PDF de Alta Calidad</strong> o imagen JPG (AirDrop / WhatsApp) y documento editable de <strong>Word (.doc)</strong>.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-card">
+      <h2><i class="fa-solid fa-floppy-disk"></i> 4. Respaldo, Sincronización e Importación en iPhone / iCloud</h2>
+      <p>
+        En el menú superior de <strong>Herramientas Rápidas</strong>, encontrará las funciones vitales para resguardar su expediente en iOS y compartirlo mediante AirDrop, WhatsApp o Archivos de Apple.
+      </p>
+      
+      <div class="feature-grid" style="grid-template-columns: 1fr;">
+        <div class="feature-item" style="border-left: 4px solid var(--accent-primary);">
+          <h3><i class="fa-solid fa-share-nodes"></i> Respaldar JSON en iOS (3 Opciones Inteligentes)</h3>
+          <p style="margin-top: 0.5rem;">Al pulsar el botón <strong>Respaldar JSON en iOS</strong>, se abrirá un cuadro modal con tres modalidades adaptadas a iPhone:</p>
+          <ul style="margin-left: 1.5rem; margin-top: 0.5rem; font-size: 0.88rem; color: var(--text-main);">
+            <li><strong>Compartir por AirDrop, WhatsApp o Correo:</strong> Utiliza el menú nativo de iOS para enviar el expediente o compartirlo vía AirDrop con otro perito/fiscal en formato JSON/TXT.</li>
+            <li><strong>Elegir Dónde Guardar en Archivos / iCloud:</strong> Abre la app nativa <em>Archivos</em> de Apple para elegir la carpeta interna de tu iPhone o en iCloud Drive.</li>
+            <li><strong>Descarga Rápida en Archivos:</strong> Lo descarga en un solo toque directamente a tu carpeta local de <code>Descargas</code> del iPhone.</li>
+          </ul>
+        </div>
+
+        <div class="feature-item" style="border-left: 4px solid var(--accent-green);">
+          <h3><i class="fa-solid fa-file-import"></i> Importar Respaldo (Continuar Expediente en iOS)</h3>
+          <p style="margin-top: 0.5rem;">
+            Si tienes un respaldo en iCloud o te lo enviaron por AirDrop/WhatsApp: presiona el botón <strong>Importar Respaldo JSON</strong>. Se abrirá el selector de Archivos de iOS donde podrás elegir tu archivo pericial y restaurarlo instantáneamente sin perder un solo dato en terreno.
+          </p>
+        </div>
+      </div>
+
+      <div class="alert-box warning">
+        <i class="fa-solid fa-lightbulb"></i> <strong>Autoguardado en Vivo:</strong> El sistema guarda continuamente cada letra y fotografía en la memoria local (localStorage) de su iPhone. Si cierra Safari o reinicia el teléfono en el sitio del suceso, al abrir SIF-SS todo seguirá exactamente donde lo dejó.
+      </div>
+    </div>
+
+  </main>
+</body>
+</html>

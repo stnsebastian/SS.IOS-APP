@@ -1,0 +1,66 @@
+const CACHE_NAME = 'sif-ss-iphone-v4.1';
+const ASSETS_TO_CACHE = [
+  './',
+  './index.html',
+  './manual_usuario.html',
+  './styles.css',
+  './app.js',
+  './manifest.json',
+  './icon-192.svg',
+  './icon-512.svg',
+  './apple-touch-icon.svg'
+];
+
+self.addEventListener('install', (event) => {
+  event.waitUntil(
+    caches.open(CACHE_NAME).then((cache) => {
+      console.log('[SIF SS iPhone iOS] Caché offline instalada v3.9');
+      return cache.addAll(ASSETS_TO_CACHE);
+    })
+  );
+  self.skipWaiting();
+});
+
+self.addEventListener('activate', (event) => {
+  event.waitUntil(
+    caches.keys().then((cacheNames) => {
+      return Promise.all(
+        cacheNames.map((name) => {
+          if (name !== CACHE_NAME) {
+            console.log('[SIF SS iPhone iOS] Eliminando caché antigua:', name);
+            return caches.delete(name);
+          }
+        })
+      );
+    })
+  );
+  self.clients.claim();
+});
+
+self.addEventListener('fetch', (event) => {
+  // Estrategia Network-First (Primero Internet, si no hay internet o falla, usa Caché Offline)
+  event.respondWith(
+    fetch(event.request)
+      .then((networkResponse) => {
+        // Actualiza la caché en segundo plano con la nueva versión en línea
+        if (event.request.method === 'GET' && networkResponse && networkResponse.status === 200) {
+          const responseClone = networkResponse.clone();
+          caches.open(CACHE_NAME).then((cache) => {
+            cache.put(event.request, responseClone);
+          });
+        }
+        return networkResponse;
+      })
+      .catch(() => {
+        // Si no hay internet, busca en la caché
+        return caches.match(event.request).then((cachedResponse) => {
+          if (cachedResponse) {
+            return cachedResponse;
+          }
+          if (event.request.mode === 'navigate') {
+            return caches.match('./index.html');
+          }
+        });
+      })
+  );
+});
