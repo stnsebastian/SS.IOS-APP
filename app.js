@@ -62,6 +62,8 @@ const defaultState = {
   tanatologia: { livideces: 'Móviles', rigidez: 'Completa', putrefaccion: '', maceracion: '' },
   lesionesFijadas: [],
   observaciones: '',
+  incluirEmpadronadoWhatsapp: 'NO',
+  tipoDeclaracionWhatsapp: 'EMPADRONADO',
   observacionesFinales: '',
   descripcionSS: '',
   vestimenta: { superiores: '', inferiores: '', calzado: '', abrigo: '', cuerpoEntero: '', otros: '' },
@@ -1167,6 +1169,9 @@ function generateReporteAmpliacionConcurrenciaText() {
   }
 
   const extraDiligencias = appState.observacionesFinales ? ` ${appState.observacionesFinales}` : '';
+  const empadronadoWhatsApp = (appState.incluirEmpadronadoWhatsapp === 'SI' && appState.observacionesFinales)
+    ? `\n\n▪ *${appState.tipoDeclaracionWhatsapp || 'EMPADRONADO'}:* ${appState.observacionesFinales}`
+    : '';
 
   const nueStr = ant.nue || 'SIN REGISTRAR';
 
@@ -1195,11 +1200,10 @@ function generateReporteAmpliacionConcurrenciaText() {
 
 ▪ *CONCURRENCIA PERITOS LACRIM:* ${lacrimStr}
 
-▪ *DILIGENCIAS:* Personal del turno de esta BICRIM, por instrucción del Fiscal de Turno ${fiscalStr}, concurrieron al Sitio del Suceso antes señalado, donde se realizo trabajo en el S.S, al reconocimiento externo policial el cuerpo se encontró en ${ubicacionStr}, ${antecedentesDiligenciaStr}. Finalmente, de acuerdo con las diligencias practicadas, se realizo empadronamiento y fijación fotográfica.
+▪ *DILIGENCIAS:* Personal del turno de esta BICRIM, por instrucción del Fiscal de Turno ${fiscalStr}, concurrieron al Sitio del Suceso antes señalado, donde se realizo trabajo en el S.S, al reconocimiento externo policial el cuerpo se encontró en ${ubicacionStr}, ${antecedentesDiligenciaStr}. Finalmente, de acuerdo con las diligencias practicadas, se realizo empadronamiento y fijación fotográfica.${empadronadoWhatsApp}
 
 ▪ *N° NUE:* ${nueStr}
 
-CUNOCO
 --------------------------------------------------
 REPORTE DE SISTEMA INTEGRAL FORENSE S.S`;
 
