@@ -11,7 +11,7 @@
   <link rel="manifest" href="manifest.json">
   <title>SIF-SS // Sistema Integral Forense - Sitio del Suceso (Versión Móvil iPhone / iOS)</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="styles.css?v=5.04">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 </head>
 <body>
@@ -1223,10 +1223,7 @@
 
           <div style="display: flex; gap: 0.6rem; flex-wrap: wrap;">
             <button id="btnOpenExportPdfJpg" class="btn btn-primary" style="font-weight: 700;">
-              <i class="fa-solid fa-file-pdf"></i> Exportar PDF / JPG
-            </button>
-            <button id="btnExportReportWord" class="btn btn-secondary">
-              <i class="fa-solid fa-file-word" style="color: #38bdf8;"></i> Word (.doc)
+              <i class="fa-solid fa-file-pdf"></i> Exportar PDF
             </button>
           </div>
         </div>
@@ -1253,10 +1250,7 @@
             </div>
             <div style="display: flex; gap: 0.6rem; flex-wrap: wrap;">
               <button id="btnExportFichaPDF" class="btn btn-primary" style="font-weight: 700;">
-                <i class="fa-solid fa-file-pdf"></i> PDF / JPG
-              </button>
-              <button id="btnExportFichaWord" class="btn btn-secondary">
-                <i class="fa-solid fa-file-word" style="color: #38bdf8;"></i> Word (.doc)
+                <i class="fa-solid fa-file-pdf"></i> Exportar PDF
               </button>
             </div>
           </div>
@@ -1310,21 +1304,18 @@
     </div>
   </div>
 
-  <!-- MODAL EXPORTAR PDF / JPG -->
-  <div id="modalExportPdfJpg" class="modal-overlay">
+  <!-- MODAL EXPORTAR PDF -->
+  <div id="modalExportPdfJpg" class="modal-overlay" style="display: none;">
     <div class="modal-content" style="max-width: 440px;">
       <h3 style="font-size: 1.15rem; font-weight: 800; color: var(--accent-primary); margin-bottom: 1rem;">
         <i class="fa-solid fa-print"></i> Exportar Documento Forense
       </h3>
       <p style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 1.4rem;">
-        Selecciona el formato de exportación deseado en tu dispositivo iPhone / iOS:
+        Exporta el documento oficial en formato PDF para adjuntarlo al parte:
       </p>
       <div style="display: flex; flex-direction: column; gap: 0.85rem;">
         <button type="button" id="btnSavePDFModal" class="btn btn-primary" style="justify-content: center; padding: 0.9rem;">
-          <i class="fa-solid fa-file-pdf"></i> Imprimir / Guardar como PDF en iOS
-        </button>
-        <button type="button" id="btnSaveJPGModal" class="btn btn-secondary" style="justify-content: center; padding: 0.9rem;">
-          <i class="fa-solid fa-image"></i> Descargar Imagen JPG Oficial
+          <i class="fa-solid fa-file-pdf"></i> Imprimir / Guardar como PDF
         </button>
       </div>
       <div style="display: flex; justify-content: flex-end; margin-top: 1.3rem;">
@@ -1407,12 +1398,12 @@
   <div id="toastContainer" class="toast-container" data-html2canvas-ignore="true"></div>
 
   <!-- SCRIPTS -->
-  <script src="app.js?v=4.95"></script>
+  <script src="app.js?v=5.09"></script>
   <script>
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
-        navigator.serviceWorker.register('./sw.js?v=4.95')
-          .then(reg => console.log('✅ [iOS PWA] Service Worker registrado para iPhone Offline v4.95:', reg.scope))
+        navigator.serviceWorker.register('./sw.js?v=5.09')
+          .then(reg => console.log('✅ [iOS PWA] Service Worker registrado para iPhone Offline v5.09:', reg.scope))
           .catch(err => console.error('❌ [iOS PWA] Error al registrar SW:', err));
       });
     }

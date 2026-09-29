@@ -1,5 +1,5 @@
-const CACHE_NAME = 'sif-ss-iphone-v4.95';
-const ASSETS_TO_CACHE = [
+const CACHE_NAME = 'sif-ss-iphone-v5.09';
+const LOCAL_ASSETS = [
   './',
   './index.html',
   './manual_usuario.html',
@@ -11,11 +11,27 @@ const ASSETS_TO_CACHE = [
   './apple-touch-icon.svg'
 ];
 
+const EXTERNAL_ASSETS = [
+  'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css',
+  'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js',
+  'https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js'
+];
+
 self.addEventListener('install', (event) => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => {
-      console.log('[SIF SS iPhone iOS] Caché offline instalada v3.9');
-      return cache.addAll(ASSETS_TO_CACHE);
+    caches.open(CACHE_NAME).then(async (cache) => {
+      console.log('[SIF SS iPhone iOS] Instalando caché offline...');
+      await cache.addAll(LOCAL_ASSETS);
+      for (const url of EXTERNAL_ASSETS) {
+        try {
+          const resp = await fetch(url, { mode: 'cors' });
+          if (resp && (resp.status === 200 || resp.type === 'opaque')) {
+            await cache.put(url, resp);
+          }
+        } catch (e) {
+          console.warn('[SIF SS iPhone iOS] Aviso CDN:', url);
+        }
+      }
     })
   );
   self.skipWaiting();
