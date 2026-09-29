@@ -796,7 +796,7 @@ function renderOfficialDocument() {
   el.innerHTML = `
     <div class="official-header">
       <h1>POLICÍA DE INVESTIGACIONES DE CHILE</h1>
-      <p>LABORATORIO DE CRIMINALÍSTICA // BICRIM SAN JAVIER</p>
+      <p>LABORATORIO DE CRIMINALÍSTICA // ${appState.unidadPolicial || 'BICRIM SAN JAVIER'}</p>
       <p style="margin-top: 4px; font-weight: 700; color: #0f172a;">INFORME CIENTÍFICO TÉCNICO DEL SITIO DEL SUCESO</p>
     </div>
 
@@ -809,7 +809,7 @@ function renderOfficialDocument() {
     <div class="official-line">
       <span class="official-label">OFICIAL A CARGO:</span>
       <span class="official-value" style="font-weight: 800;">
-        JORGE PINO AVILA — <span style="font-size: 8.5pt; font-weight: 600; color: #475569;">BICRIM SAN JAVIER</span>
+        ${appState.oficialCargo || 'JORGE PINO AVILA'} — <span style="font-size: 8.5pt; font-weight: 600; color: #475569;">${appState.unidadPolicial || 'BICRIM SAN JAVIER'}</span>
       </span>
     </div>
 
@@ -828,7 +828,7 @@ function renderOfficialDocument() {
     <div class="official-line"><span class="official-label">FECHA / HORA COMUNICACIÓN:</span><span class="official-value">${c.fecha || '--/--/----'} A LAS ${c.hora || '--:--'} HRS.</span></div>
     <div class="official-line"><span class="official-label">FISCAL DE TURNO:</span><span class="official-value" style="font-weight: 800; color: #0f172a;">${fiscalTexto}</span></div>
     <div class="official-line"><span class="official-label">UNIDAD COMUNICA:</span><span class="official-value">${c.unidadFuncionarioComunica || 'SIN REGISTRAR'}</span></div>
-    <div class="official-line"><span class="official-label">LUGAR DEL S.S.:</span><span class="official-value">${c.direccionSS || 'SIN REGISTRAR'}</span></div>
+    <div class="official-line"><span class="official-label">LUGAR DEL S.S.:</span><span class="official-value">${c.direccionSS || 'SIN REGISTRAR'}${c.comunaSS ? ' — COMUNA: ' + c.comunaSS : ''}</span></div>
     <div class="official-line"><span class="official-label">COORDENADAS GPS:</span><span class="official-value">${c.coordenadasGPS || 'SIN REGISTRAR'}</span></div>
     <div class="official-line"><span class="official-label">CUSTODIA S.S.:</span><span class="official-value">${c.unidadCustodia || ''} - ${c.funcionarioCustodia || ''}</span></div>
 
@@ -849,8 +849,8 @@ function renderOfficialDocument() {
     <!-- ============================================================= -->
     <!-- PESTAÑA 2: EXAMEN CORPORAL, ANTROPOMETRÍA Y CROQUIS ANATÓMICO -->
     <!-- ============================================================= -->
-    <br><br>
-    <div class="official-tab-header">PESTAÑA 2: EXAMEN CORPORAL, ANTROPOMETRÍA Y CROQUIS ANATÓMICO</div>
+    <div class="html2pdf__page-break"></div>
+    <div class="official-tab-header" style="margin-top: 20px;">PESTAÑA 2: EXAMEN CORPORAL, ANTROPOMETRÍA Y CROQUIS ANATÓMICO</div>
 
     <div class="official-section-title">VII. UBICACIÓN DEL CUERPO EN EL SITIO DEL SUCESO</div>
     <div class="official-line"><span class="official-label">LUGAR DEL HALLAZGO:</span><span class="official-value" style="font-weight: 800; color: #0f172a;">${ubicacionTexto}</span></div>
@@ -897,8 +897,8 @@ function renderOfficialDocument() {
     <!-- ============================================================= -->
     <!-- PESTAÑA 3: VESTIMENTA, PERITOS Y CONCLUSIONES                 -->
     <!-- ============================================================= -->
-    <br><br>
-    <div class="official-tab-header">PESTAÑA 3: VESTIMENTA, PERITOS Y CONCLUSIONES</div>
+    <div class="html2pdf__page-break"></div>
+    <div class="official-tab-header" style="margin-top: 20px;">PESTAÑA 3: VESTIMENTA, PERITOS Y CONCLUSIONES</div>
 
     <div class="official-section-title">XIV. CONCURRENCIA PERITOS LACRIM</div>
     <div style="padding: 10px 14px; background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 4px; font-size: 9.5pt; color: #1e293b;">
@@ -922,7 +922,7 @@ function renderOfficialDocument() {
 
     <div class="official-section-title">XVI. OBSERVACIONES Y EMPADRONADOS</div>
     <div style="padding: 10px 14px; background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 4px; font-size: 9.5pt; color: #1e293b; white-space: pre-wrap;">
-      ${appState.observacionesFinales || 'SIN OBSERVACIONES FINALES Y EMPADRONADOS REGISTRADOS.'}
+      ${appState.observacionesFinales ? (appState.incluirEmpadronadoWhatsapp === 'SI' ? `${appState.tipoDeclaracionWhatsapp || 'EMPADRONADO'}:\n${appState.observacionesFinales}` : appState.observacionesFinales) : 'SIN OBSERVACIONES FINALES Y EMPADRONADOS REGISTRADOS.'}
     </div>
 
     <div class="official-section-title">XVII. DESCRIPCIÓN DEL S.S.</div>
@@ -931,6 +931,8 @@ function renderOfficialDocument() {
     </div>
 
     <div class="official-section-title">XVIII. CONCLUSIÓN DEL EXAMEN Y HORARIOS</div>
+    <div class="official-line"><span class="official-label">HORA FIN EXAMEN EXTERNO:</span><span class="official-value">${appState.horaFinExamenExterno || 'SIN REGISTRAR'}</span></div>
+    <div class="official-line"><span class="official-label">HORA FINALIZACIÓN S.S.:</span><span class="official-value">${appState.horaFinSS || 'SIN REGISTRAR'}</span></div>
     <div class="official-line"><span class="official-label">DATA ESTIMADA DE MUERTE:</span><span class="official-value">${appState.dataMuerte || 'SIN REGISTRAR'}</span></div>
     <div class="official-line"><span class="official-label">CAUSA PROBABLE DE MUERTE:</span><span class="official-value" style="font-weight: 800; color: #0f172a;">${causaTexto}</span></div>
 
@@ -940,6 +942,511 @@ function renderOfficialDocument() {
     <div class="official-line"><span class="official-label">CALZADO / ABRIGO:</span><span class="official-value">${vest.calzado || 'SIN REGISTRAR'} // ${vest.abrigo || 'SIN REGISTRAR'}</span></div>
     <div class="official-line"><span class="official-label">VESTIMENTA CUERPO ENTERO:</span><span class="official-value">${vest.cuerpoEntero || 'SIN REGISTRAR'}</span></div>
   `;
+  renderFichaInformativa();
+}
+
+// RENDERIZAR FICHA INFORMATIVA
+function renderFichaInformativa() {
+  const el = document.getElementById('fichaInformativaContent');
+  if (!el) return;
+
+  const ant = appState.antecedentes || {};
+  const id = appState.fallecido || {};
+  const antropo = appState.antropometria || {};
+  const dataMuerte = appState.dataMuerte || '';
+  const causa = appState.causaProbable || '';
+  const lacrim = appState.peritosLacrim || {};
+  const clasif = appState.clasificacionCaso || {};
+  
+  const causaTexto = causa === 'OTRO' ? appState.causaProbableOtro || 'SIN ESPECIFICAR' : causa;
+  
+  const parseAddress = (str) => {
+    if (!str) return { street: '-', number: '-' };
+    const s = str.trim();
+    const m = s.match(/^(.*?)\s+([0-9]+[a-zA-Z]*)$/);
+    if (m) return { street: m[1].trim(), number: m[2].trim() };
+    return { street: s, number: '-' };
+  };
+  const domFallecido = parseAddress(id.domicilio);
+  const domSS = parseAddress(appState.comunicacion?.direccionSS || appState.comunicacion?.direccion);
+  
+  const gepolActivosFicha = [];
+  if (appState.comunicacion?.gepol) {
+    const gp = appState.comunicacion.gepol;
+    if (gp['731']) gepolActivosFicha.push('731');
+    if (gp['RETACO']) gepolActivosFicha.push('RETACO');
+    if (gp['REORPE']) gepolActivosFicha.push('REORPE');
+    if (gp['PREDES']) gepolActivosFicha.push('PREDES');
+  }
+  const gepolFicha = gepolActivosFicha.length > 0 ? gepolActivosFicha.join(' - ') : 'S/A';
+
+  const t = appState.tecnicosSS || {};
+  const ubicacionStr = t.ubicacionCuerpo === 'OTRO' ? (t.ubicacionCuerpoOtro || 'OTRO LUGAR') : (t.ubicacionCuerpo || 'NO REGISTRADO');
+  
+  let antecedentesDiligenciaStr = '';
+  if (ant.tieneAntecedentes === 'NO') {
+    antecedentesDiligenciaStr = 'No Mantiene Antecedentes Clínicos';
+  } else {
+    const antList = [];
+    if (ant.situacionCalle) antList.push('SITUACIÓN DE CALLE');
+    if (ant.discapacitado) antList.push('DISCAPACIDAD');
+    if (ant.drogadiccion) antList.push('DROGADICCIÓN');
+    if (ant.alcoholismo) antList.push('ALCOHOLISMO');
+    if (ant.otros) antList.push(ant.otros);
+    const antTexto = antList.length > 0 ? antList.join(', ') : 'ANTECEDENTES CLÍNICOS REGISTRADOS';
+    antecedentesDiligenciaStr = `mantiene antecedentes de ${antTexto}`;
+  }
+
+  const empadronadoFicha = (appState.incluirEmpadronadoWhatsapp === 'SI' && appState.observacionesFinales)
+    ? `\n\n${appState.tipoDeclaracionWhatsapp || 'EMPADRONADO'}: ${appState.observacionesFinales}`
+    : '';
+
+  const modusOperandiStr = `Se realizo trabajo en el S.S, al reconocimiento externo policial el cuerpo se encontró en ${ubicacionStr}, ${antecedentesDiligenciaStr}. Finalmente, de acuerdo con las diligencias practicadas, se realizo empadronamiento y fijación fotográfica.${empadronadoFicha}`;
+
+  let html = `
+    <div style="font-family: Arial, sans-serif; font-size: 9pt; line-height: 1.3; max-width: 21.59cm; margin: 0 auto; padding: 0.5cm 0.5cm 0.5cm 1.5cm; background: white; box-sizing: border-box; text-transform: uppercase;" id="fichaInformativaWrapper">
+      <style>
+        #fichaInformativaWrapper table:not(.no-border), 
+        #fichaInformativaWrapper table:not(.no-border) th, 
+        #fichaInformativaWrapper table:not(.no-border) td {
+          border: 1px solid black !important;
+        }
+        #fichaInformativaWrapper table.no-border {
+          border: none !important;
+        }
+        #fichaInformativaWrapper table.no-border > tbody > tr > td,
+        #fichaInformativaWrapper table.no-border > tr > td {
+          border: none !important;
+        }
+      </style>
+      <h2 style="text-align: center; font-size: 13pt; margin: 30px 0 40px 0;">FICHA INFORMATIVA DE CONCURRENCIA</h2>
+      <table class="no-border" style="width: 100%; margin-bottom: 8px;" border="0">
+        <tr>
+          <td style="width: 45%; vertical-align: top; padding: 0;">
+            <table style="width: 100%; border-collapse: collapse; text-align: center;" border="1" bordercolor="black">
+              <tr><td style="background-color: #92cddc; font-weight: bold; padding: 2px;">POLICIA DE INVESTIGACIONES DE CHILE</td></tr>
+              <tr><td style="color: red; font-weight: bold; padding: 2px; background-color: white;">${appState.unidadPolicial || 'BRIGADA DE INVESTIGACIÓN CRIMINAL SAN JAVIER'}</td></tr>
+            </table>
+          </td>
+          <td style="width: 10%;"></td>
+          <td style="width: 45%; vertical-align: top; padding: 0;">
+            <table style="width: 100%; border-collapse: collapse; text-align: center;" border="1" bordercolor="black">
+              <tr>
+                <td style="background-color: #92cddc; font-weight: bold; padding: 2px; width: 40%;">N°</td>
+                <td style="color: red; font-weight: bold; padding: 2px; width: 30%;"></td>
+                <td style="background-color: #92cddc; font-weight: bold; padding: 2px; width: 30%;">ORD</td>
+              </tr>
+              <tr>
+                <td style="background-color: #92cddc; font-weight: bold; padding: 2px;">FECHA:</td>
+                <td colspan="2" style="color: red; padding: 2px;">${new Date().toLocaleDateString('es-CL')}</td>
+              </tr>
+              <tr>
+                <td rowspan="2" style="background-color: #92cddc; font-weight: bold; padding: 2px;">COMUNICACION<br>DE LA FISCALIA</td>
+                <td style="background-color: #92cddc; font-weight: bold; padding: 2px;">FECHA:</td>
+                <td style="color: red; padding: 2px;">${ant.fechaRecepcion ? ant.fechaRecepcion.split('-').reverse().join('-') : '-'}</td>
+              </tr>
+              <tr>
+                <td style="background-color: #92cddc; font-weight: bold; padding: 2px;">HORA:</td>
+                <td style="color: red; padding: 2px;">${ant.horaRecepcion || '-'}</td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+      </table>
+
+      <!-- 1- ANTECEDENTES DEL HECHO -->
+      <p style="font-weight: bold; margin: 25px 0 15px 0; font-size: 9pt;">1- &#160;&#160;&#160;ANTECEDENTES DEL HECHO</p>
+      <table style="width: 100%; border-collapse: collapse; margin-bottom: 8px; table-layout: fixed;" border="1" bordercolor="black">
+        <colgroup>
+          <col style="width: 15%;"><col style="width: 25%;"><col style="width: 15%;"><col style="width: 20%;"><col style="width: 15%;"><col style="width: 10%;">
+        </colgroup>
+        <tr>
+          <td style="background-color: #92cddc; font-weight: bold; padding: 2px;">FISCALIA:</td>
+          <td colspan="5" style="color: red; padding: 2px;">FLAGRANCIA, FISCAL DE TURNO - ${appState.comunicacion?.fiscalTurno || '-'}</td>
+        </tr>
+        <tr>
+          <td style="background-color: #92cddc; font-weight: bold; padding: 2px;">HECHO:</td>
+          <td style="color: red; padding: 2px;">${clasif.subtipo || '-'}</td>
+          <td style="background-color: #92cddc; font-weight: bold; padding: 2px;">MODALIDAD:</td>
+          <td style="color: red; padding: 2px; text-align: center;">-</td>
+          <td style="background-color: #92cddc; font-weight: bold; padding: 2px;">ARMA ESPECIFICA:</td>
+          <td style="color: red; padding: 2px; text-align: center;">-</td>
+        </tr>
+        <tr>
+          <td style="background-color: #ccc0da; font-weight: bold; padding: 2px;">MARCA Y MODELO:</td>
+          <td style="color: red; padding: 2px; text-align: center;">-</td>
+          <td style="background-color: #ccc0da; font-weight: bold; padding: 2px;">CALIBRE:</td>
+          <td style="color: red; padding: 2px; text-align: center;">-</td>
+          <td style="background-color: #ccc0da; font-weight: bold; padding: 2px;">N° SERIE:</td>
+          <td style="color: red; padding: 2px; text-align: center;">-</td>
+        </tr>
+      </table>
+
+      <!-- 2- ANTECENDENTES DE LA VICTIMA O FALLECIDO -->
+      <p style="font-weight: bold; margin: 30px 0 15px 0; font-size: 9pt;">2- &#160;&#160;&#160;ANTECENDENTES DE LA VICTIMA O FALLECIDO</p>
+      <div style="margin-bottom: 5px;">
+        <span style="background-color: #92cddc; font-weight: bold; padding: 2px; border: 1px solid black;">N° VICTIMAS:</span>
+        <span style="color: red; padding: 2px; border: 1px solid black; border-left: none; display: inline-block; width: 50px; text-align: center;">1</span>
+      </div>
+      <table style="width: 100%; border-collapse: collapse; margin-bottom: 8px; table-layout: fixed;" border="1" bordercolor="black">
+        <colgroup>
+          <col style="width: 5%;"><col style="width: 5%;"><col style="width: 5%;"><col style="width: 5%;"><col style="width: 5%;">
+          <col style="width: 5%;"><col style="width: 5%;"><col style="width: 5%;"><col style="width: 5%;"><col style="width: 5%;">
+          <col style="width: 5%;"><col style="width: 5%;"><col style="width: 5%;"><col style="width: 5%;"><col style="width: 5%;">
+          <col style="width: 5%;"><col style="width: 5%;"><col style="width: 5%;"><col style="width: 5%;"><col style="width: 5%;">
+        </colgroup>
+        <tr>
+          <td colspan="4" style="background-color: #92cddc; font-weight: bold; padding: 2px; text-align: center;">ESTADO</td>
+          <td colspan="16" style="color: red; font-weight: bold; padding: 2px; text-align: center;">FALLECIDA/O</td>
+        </tr>
+        <tr>
+          <td colspan="6" style="background-color: #92cddc; font-weight: bold; text-align: center; padding: 2px;">NOMBRES</td>
+          <td colspan="6" style="background-color: #92cddc; font-weight: bold; text-align: center; padding: 2px;">APELLIDO PATERNO</td>
+          <td colspan="4" style="background-color: #92cddc; font-weight: bold; text-align: center; padding: 2px;">APELLIDO MATERNO</td>
+          <td colspan="4" style="background-color: #92cddc; font-weight: bold; text-align: center; padding: 2px;">APODO</td>
+        </tr>
+        <tr>
+          <td colspan="6" style="color: red; text-align: center; padding: 2px;">${id.nombres || '-'}</td>
+          <td colspan="6" style="color: red; text-align: center; padding: 2px;">${id.apellidoPaterno || '-'}</td>
+          <td colspan="4" style="color: red; text-align: center; padding: 2px;">${id.apellidoMaterno || '-'}</td>
+          <td colspan="4" style="color: red; text-align: center; padding: 2px;">${id.apodo || '-'}</td>
+        </tr>
+        <tr>
+          <td colspan="2" style="background-color: #92cddc; font-weight: bold; padding: 2px;">SEXO:</td>
+          <td colspan="1" style="color: red; padding: 2px; text-align: center;">${id.sexo || antropo.sexo || '-'}</td>
+          <td colspan="3" style="background-color: #92cddc; font-weight: bold; padding: 2px;">DOCUMENTO:</td>
+          <td colspan="4" style="color: red; padding: 2px; text-align: center;">${id.nacionalidad === 'CHILENA' || !id.nacionalidad ? 'CÉDULA DE IDENTIDAD' : 'PASAPORTE'}</td>
+          <td colspan="1" style="background-color: #92cddc; font-weight: bold; padding: 2px;">N°:</td>
+          <td colspan="4" style="color: red; padding: 2px;">${id.run || '-'}</td>
+          <td colspan="3" style="background-color: #92cddc; font-weight: bold; padding: 2px;">NACIONALIDAD:</td>
+          <td colspan="2" style="color: red; padding: 2px;">${id.nacionalidad || 'CHILENA'}</td>
+        </tr>
+        <tr>
+          <td colspan="6" style="background-color: #92cddc; font-weight: bold; padding: 2px;">PAIS DE NACIMIENTO:</td>
+          <td colspan="4" style="color: red; padding: 2px; text-align: center;">CHILE</td>
+          <td colspan="6" style="background-color: #92cddc; font-weight: bold; padding: 2px;">CIUDAD DE NACIMIENTO:</td>
+          <td colspan="4" style="color: red; padding: 2px; text-align: center;">${id.ciudadNacimiento || '-'}</td>
+        </tr>
+        <tr>
+          <td colspan="6" style="background-color: #92cddc; font-weight: bold; padding: 2px;">FECHA DE NACIMIENTO:</td>
+          <td colspan="4" style="color: red; padding: 2px; text-align: center;">${id.fechaNacimiento ? id.fechaNacimiento.split('-').reverse().join('-') : '-'}</td>
+          <td colspan="2" style="background-color: #92cddc; font-weight: bold; padding: 2px;">EDAD:</td>
+          <td colspan="2" style="color: red; padding: 2px; text-align: center;">${id.edad || antropo.edad || '-'}</td>
+          <td colspan="4" style="background-color: #92cddc; font-weight: bold; padding: 2px;">ESTADO CIVIL:</td>
+          <td colspan="2" style="color: red; padding: 2px; text-align: center;">${id.estadoCivil || '-'}</td>
+        </tr>
+        <tr>
+          <td colspan="4" style="background-color: #92cddc; font-weight: bold; padding: 2px;">ESCOLARIDAD:</td>
+          <td colspan="6" style="color: red; padding: 2px; text-align: center;">-</td>
+          <td colspan="6" style="background-color: #92cddc; font-weight: bold; padding: 2px;">PROFESION U OFICIO:</td>
+          <td colspan="4" style="color: red; padding: 2px; text-align: center;">-</td>
+        </tr>
+        <tr>
+          <td colspan="4" style="background-color: #92cddc; font-weight: bold; padding: 2px;">DOMICILIO:</td>
+          <td colspan="2" style="background-color: #92cddc; font-weight: bold; padding: 2px; text-align: center;">VIA</td>
+          <td colspan="8" style="background-color: #92cddc; font-weight: bold; padding: 2px; text-align: center;">NOMBRE DE VIA</td>
+          <td colspan="2" style="background-color: #92cddc; font-weight: bold; padding: 2px; text-align: center;">N°</td>
+          <td colspan="2" style="background-color: #92cddc; font-weight: bold; padding: 2px; text-align: center;">DEPTO</td>
+          <td colspan="2" style="background-color: #92cddc; font-weight: bold; padding: 2px; text-align: center;">BLOCK</td>
+        </tr>
+        <tr>
+          <td colspan="4" style="color: red; padding: 2px; font-weight: bold;">PARTICULAR</td>
+          <td colspan="2" style="color: red; padding: 2px; text-align: center;">-</td>
+          <td colspan="8" style="color: red; padding: 2px; text-align: center;">${domFallecido.street}</td>
+          <td colspan="2" style="color: red; padding: 2px; text-align: center;">${domFallecido.number}</td>
+          <td colspan="2" style="color: red; padding: 2px; text-align: center;">-</td>
+          <td colspan="2" style="color: red; padding: 2px; text-align: center;">-</td>
+        </tr>
+        <tr>
+          <td colspan="6" style="background-color: #ccc0da; font-weight: bold; padding: 2px; text-align: center;">INTERSECTA CON</td>
+          <td colspan="6" style="background-color: #ccc0da; font-weight: bold; padding: 2px; text-align: center;">VILLA O POBLACION</td>
+          <td colspan="4" style="background-color: #ccc0da; font-weight: bold; padding: 2px; text-align: center;">COMUNA</td>
+          <td colspan="4" style="background-color: #ccc0da; font-weight: bold; padding: 2px; text-align: center;">REGION</td>
+        </tr>
+        <tr>
+          <td colspan="6" style="color: red; padding: 2px; text-align: center;">-</td>
+          <td colspan="6" style="color: red; padding: 2px; text-align: center;">-</td>
+          <td colspan="4" style="color: red; padding: 2px; text-align: center;">-</td>
+          <td colspan="4" style="color: red; padding: 2px; text-align: center;">MAULE</td>
+        </tr>
+        <tr>
+          <td colspan="6" style="background-color: #ccc0da; font-weight: bold; padding: 2px;">REFIERE ETNIA</td>
+          <td colspan="4" style="color: red; padding: 2px; text-align: center;">-</td>
+          <td colspan="6" style="background-color: #ccc0da; font-weight: bold; padding: 2px;">EQUIDAD DE GENERO</td>
+          <td colspan="4" style="color: red; padding: 2px; text-align: center;">-</td>
+        </tr>
+        <tr>
+          <td colspan="6" style="background-color: #ccc0da; font-weight: bold; padding: 2px;">NOMBRE SOCIAL</td>
+          <td colspan="4" style="color: red; padding: 2px; text-align: center;">-</td>
+          <td colspan="8" style="background-color: #ccc0da; font-weight: bold; padding: 2px;">SITUACION CALLE</td>
+          <td colspan="2" style="color: red; padding: 2px; text-align: center;">${ant.situacionCalle ? 'SI' : 'NO'}</td>
+        </tr>
+        <tr>
+          <td colspan="6" style="background-color: #ccc0da; font-weight: bold; padding: 2px; text-align: center;">DISCAPACIDAD</td>
+          <td colspan="2" style="color: red; padding: 2px; text-align: center;">${ant.discapacitado ? 'SI' : 'NO'}</td>
+          <td colspan="6" style="background-color: #ccc0da; font-weight: bold; padding: 2px; text-align: center;">TIPO:</td>
+          <td colspan="6" style="color: red; padding: 2px; text-align: center;">-</td>
+        </tr>
+        <tr>
+          <td colspan="8" style="background-color: #ccc0da; font-weight: bold; padding: 2px; text-align: center;">CONSUMO DE DROGAS Y/O ALCOHOL AL MOMENTO DEL HECHO</td>
+          <td colspan="2" style="color: red; padding: 2px; text-align: center;">-</td>
+          <td colspan="4" style="background-color: #ccc0da; font-weight: bold; padding: 2px; text-align: center;">TIPO DROGA:</td>
+          <td colspan="6" style="color: red; padding: 2px; text-align: center;">-</td>
+        </tr>
+        <tr>
+          <td colspan="8" style="background-color: #ccc0da; font-weight: bold; padding: 2px; text-align: center;">ANTECEDENTES DE DROGADICCION Y/O ALCOHOLISMO.</td>
+          <td colspan="2" style="color: red; padding: 2px; text-align: center;">${ant.drogadiccion || ant.alcoholismo ? 'SI' : 'NO'}</td>
+          <td colspan="4" style="background-color: #ccc0da; font-weight: bold; padding: 2px; text-align: center;">TIPO DROGA:</td>
+          <td colspan="6" style="color: red; padding: 2px; text-align: center;">-</td>
+        </tr>
+        <tr>
+          <td colspan="10" style="background-color: #92cddc; font-weight: bold; padding: 2px; text-align: center;">GEPOL</td>
+          <td colspan="10" style="color: red; padding: 2px; text-align: center;">${gepolFicha}</td>
+        </tr>
+        <tr>
+          <td colspan="6" style="background-color: #92cddc; font-weight: bold; padding: 2px; text-align: center;">ARRAIGO</td>
+          <td colspan="2" style="color: red; padding: 2px; text-align: center;">NO</td>
+          <td colspan="10" style="background-color: #92cddc; font-weight: bold; padding: 2px; text-align: center;">PREDES</td>
+          <td colspan="2" style="color: red; padding: 2px; text-align: center;">${appState.predes || 'NO'}</td>
+        </tr>
+      </table>
+
+      <!-- OTROS ANTECEDENTES EN CASO CUERPOS NO IDENTIFICADOS... -->
+      <table style="width: 100%; border-collapse: collapse; margin-top: 30px; margin-bottom: 8px; table-layout: fixed;" border="1" bordercolor="black">
+        <colgroup>
+          <col style="width: 10%;"><col style="width: 10%;"><col style="width: 10%;"><col style="width: 10%;"><col style="width: 10%;">
+          <col style="width: 10%;"><col style="width: 10%;"><col style="width: 10%;"><col style="width: 10%;"><col style="width: 10%;">
+        </colgroup>
+        <tr>
+          <td colspan="10" style="background-color: #8db4e2; font-weight: bold; padding: 2px; text-align: left;">OTROS ANTECEDENTES EN CASO CUERPOS NO IDENTIFICADOS, LACTANTES, FETOS U OSAMENTAS</td>
+        </tr>
+        <tr>
+          <td colspan="2" style="background-color: #d9e1f2; font-weight: bold; padding: 2px; text-align: center;">TIPO</td>
+          <td colspan="2" style="color: red; padding: 2px; text-align: center;">-</td>
+          <td colspan="1" style="background-color: #d9e1f2; font-weight: bold; padding: 2px; text-align: center;">SEXO</td>
+          <td colspan="2" style="color: red; padding: 2px; text-align: center;">-</td>
+          <td colspan="2" style="background-color: #d9e1f2; font-weight: bold; padding: 2px; text-align: center;">EDAD APROXIMADA</td>
+          <td colspan="1" style="color: red; padding: 2px; text-align: center;">-</td>
+        </tr>
+        <tr>
+          <td colspan="2" style="background-color: #d9e1f2; font-weight: bold; padding: 2px; text-align: center;">OTROS DATOS</td>
+          <td colspan="8" style="color: red; padding: 2px; text-align: center;">-</td>
+        </tr>
+        <tr>
+          <td colspan="2" style="background-color: #d9e1f2; font-weight: bold; padding: 2px; text-align: center;">IDENTIDAD MADRE</td>
+          <td colspan="2" style="background-color: #d9e1f2; font-weight: bold; padding: 2px; text-align: center;">DOCUMENTO Nº</td>
+          <td colspan="2" style="color: red; padding: 2px; text-align: center;">-</td>
+          <td colspan="1" style="background-color: #d9e1f2; font-weight: bold; padding: 2px; text-align: center;">NOMBRE</td>
+          <td colspan="3" style="color: red; padding: 2px; text-align: center;">-</td>
+        </tr>
+        <tr>
+          <td colspan="2" style="background-color: #d9e1f2; font-weight: bold; padding: 2px; text-align: center;">IDENTIDAD PADRE</td>
+          <td colspan="2" style="background-color: #d9e1f2; font-weight: bold; padding: 2px; text-align: center;">DOCUMENTO Nº</td>
+          <td colspan="2" style="color: red; padding: 2px; text-align: center;">-</td>
+          <td colspan="1" style="background-color: #d9e1f2; font-weight: bold; padding: 2px; text-align: center;">NOMBRE</td>
+          <td colspan="3" style="color: red; padding: 2px; text-align: center;">-</td>
+        </tr>
+      </table>
+
+      <!-- 3- SITIO DEL SUCESO -->
+      <p style="font-weight: bold; margin: 30px 0 15px 0; font-size: 9pt;">3- &#160;&#160;&#160;SITIO DEL SUCESO</p>
+      <table style="width: 100%; border-collapse: collapse; margin-bottom: 8px;" border="1" bordercolor="black">
+        <tr>
+          <td style="background-color: #d9e1f2; font-weight: bold; padding: 2px;">FECHA CONCURRENCIA</td>
+          <td style="color: red; padding: 2px; text-align: center;">${ant.fechaRecepcion ? ant.fechaRecepcion.split('-').reverse().join('-') : '-'}</td>
+          <td colspan="2" style="background-color: #d9e1f2; font-weight: bold; padding: 2px; text-align: center;">COORDENADAS GPS FORMATO UTM:</td>
+          <td colspan="4" style="color: red; padding: 2px; text-align: center;">${appState.comunicacion?.coordenadasGPS || '-'}</td>
+        </tr>
+        <tr>
+          <td style="background-color: #d9e1f2; font-weight: bold; padding: 2px; text-align: center;">LUGAR ESPECIFICO</td>
+          <td style="background-color: #d9e1f2; font-weight: bold; padding: 2px; text-align: center;">VIA</td>
+          <td colspan="2" style="background-color: #d9e1f2; font-weight: bold; padding: 2px; text-align: center;">NOMBRE DE VIA</td>
+          <td style="background-color: #d9e1f2; font-weight: bold; padding: 2px; text-align: center;">N°</td>
+          <td style="background-color: #d9e1f2; font-weight: bold; padding: 2px; text-align: center;">DEPTO</td>
+          <td colspan="2" style="background-color: #d9e1f2; font-weight: bold; padding: 2px; text-align: center;">BLOCK</td>
+        </tr>
+        <tr>
+          <td style="color: red; padding: 2px; text-align: center;">-</td>
+          <td style="color: red; padding: 2px; text-align: center;">-</td>
+          <td colspan="2" style="color: red; padding: 2px; text-align: center;">${domSS.street}</td>
+          <td style="color: red; padding: 2px; text-align: center;">${domSS.number}</td>
+          <td style="color: red; padding: 2px; text-align: center;">-</td>
+          <td colspan="2" style="color: red; padding: 2px; text-align: center;">-</td>
+        </tr>
+        <tr>
+          <td colspan="2" style="background-color: #d9e1f2; font-weight: bold; padding: 2px; text-align: center;">INTERSECTA CON</td>
+          <td colspan="2" style="background-color: #d9e1f2; font-weight: bold; padding: 2px; text-align: center;">VILLA O POBLACION</td>
+          <td colspan="2" style="background-color: #d9e1f2; font-weight: bold; padding: 2px; text-align: center;">COMUNA</td>
+          <td colspan="2" style="background-color: #d9e1f2; font-weight: bold; padding: 2px; text-align: center;">REGION</td>
+        </tr>
+        <tr>
+          <td colspan="2" style="color: red; padding: 2px; text-align: center;">-</td>
+          <td colspan="2" style="color: red; padding: 2px; text-align: center;">-</td>
+          <td colspan="2" style="color: red; padding: 2px; text-align: center;">${appState.comunicacion?.comunaSS || '-'}</td>
+          <td colspan="2" style="color: red; padding: 2px; text-align: center;">MAULE</td>
+        </tr>
+        <tr>
+          <td colspan="3" style="background-color: #d9e1f2; font-weight: bold; padding: 2px; text-align: center;">CONCURRENCIA MEDICO CRIMINALISTA:</td>
+          <td style="color: red; padding: 2px; text-align: center;">NO</td>
+          <td colspan="3" style="background-color: #d9e1f2; font-weight: bold; padding: 2px; text-align: center;">CONCURRENCIA PERITOS DEL LACRIM:</td>
+          <td style="color: red; padding: 2px; text-align: center;">${lacrim.concurre || 'NO'}</td>
+        </tr>
+      </table>
+      
+      <!-- 3.1- PRINCIPIO DE EJECUCION -->
+      <div style="page-break-before: always;"></div>
+      <div style="height: 40px;"></div>
+      <p style="font-weight: bold; margin: 0 0 15px 0; font-size: 9pt;">3.1- &#160;&#160;&#160;PRINCIPIO DE EJECUCION</p>
+      <table style="width: 100%; border-collapse: collapse; margin-bottom: 8px; table-layout: fixed;" border="1" bordercolor="black">
+        <colgroup>
+          <col style="width: 10%;"><col style="width: 10%;"><col style="width: 10%;"><col style="width: 10%;"><col style="width: 10%;">
+          <col style="width: 10%;"><col style="width: 10%;"><col style="width: 10%;"><col style="width: 10%;"><col style="width: 10%;">
+        </colgroup>
+        <tr>
+          <td colspan="3" style="background-color: #d9e1f2; font-weight: bold; padding: 2px; text-align: center;">FECHA OCURRENCIA</td>
+          <td colspan="2" style="color: red; padding: 2px; text-align: center;">${ant.fechaRecepcion ? ant.fechaRecepcion.split('-').reverse().join('-') : '-'}</td>
+          <td colspan="3" rowspan="2" style="background-color: #d9e1f2; font-weight: bold; padding: 2px; text-align: center;">COORDENADAS GPS FORMATO<br>UTM:</td>
+          <td colspan="2" rowspan="2" style="color: red; padding: 2px; text-align: center;">${appState.comunicacion?.coordenadasGPS || '-'}</td>
+        </tr>
+        <tr>
+          <td colspan="3" style="background-color: #d9e1f2; font-weight: bold; padding: 2px; text-align: center;">BLOQUE HORARIO</td>
+          <td colspan="2" style="color: red; padding: 2px; text-align: center;">-</td>
+        </tr>
+        <tr>
+          <td colspan="3" style="background-color: #d9e1f2; font-weight: bold; padding: 2px; text-align: center;">LUGAR ESPECIFICO</td>
+          <td colspan="3" style="background-color: #d9e1f2; font-weight: bold; padding: 2px; text-align: center;">NOMBRE DE VIA</td>
+          <td colspan="1" style="background-color: #d9e1f2; font-weight: bold; padding: 2px; text-align: center;">N°</td>
+          <td colspan="1" style="background-color: #d9e1f2; font-weight: bold; padding: 2px; text-align: center;">DEPTO</td>
+          <td colspan="2" style="background-color: #d9e1f2; font-weight: bold; padding: 2px; text-align: center;">BLOCK</td>
+        </tr>
+        <tr>
+          <td colspan="3" style="color: red; padding: 2px; text-align: center;">-</td>
+          <td colspan="3" style="color: red; padding: 2px; text-align: center;">${domSS.street}</td>
+          <td colspan="1" style="color: red; padding: 2px; text-align: center;">${domSS.number}</td>
+          <td colspan="1" style="color: red; padding: 2px; text-align: center;">-</td>
+          <td colspan="2" style="color: red; padding: 2px; text-align: center;">-</td>
+        </tr>
+        <tr>
+          <td colspan="3" style="background-color: #d9e1f2; font-weight: bold; padding: 2px; text-align: center;">INTERSECTA CON</td>
+          <td colspan="3" style="background-color: #d9e1f2; font-weight: bold; padding: 2px; text-align: center;">VILLA O POBLACION</td>
+          <td colspan="2" style="background-color: #d9e1f2; font-weight: bold; padding: 2px; text-align: center;">COMUNA</td>
+          <td colspan="2" style="background-color: #d9e1f2; font-weight: bold; padding: 2px; text-align: center;">REGION</td>
+        </tr>
+        <tr>
+          <td colspan="3" style="color: red; padding: 2px; text-align: center;">-</td>
+          <td colspan="3" style="color: red; padding: 2px; text-align: center;">-</td>
+          <td colspan="2" style="color: red; padding: 2px; text-align: center;">${appState.comunicacion?.comunaSS || '-'}</td>
+          <td colspan="2" style="color: red; padding: 2px; text-align: center;">MAULE</td>
+        </tr>
+      </table>
+
+      <!-- 4- RESULTADOS -->
+      <p style="font-weight: bold; margin: 30px 0 15px 0; font-size: 9pt;">4- &#160;&#160;&#160;RESULTADOS:</p>
+      <table style="width: 100%; border-collapse: collapse; margin-bottom: 8px; table-layout: fixed;" border="1" bordercolor="black">
+        <colgroup>
+          <col style="width: 10%;"><col style="width: 10%;"><col style="width: 10%;"><col style="width: 10%;"><col style="width: 10%;">
+          <col style="width: 10%;"><col style="width: 10%;"><col style="width: 10%;"><col style="width: 10%;"><col style="width: 10%;">
+        </colgroup>
+        <tr>
+          <td colspan="10" style="background-color: #d9e1f2; font-weight: bold; text-align: center; padding: 2px;">MODUS OPERANDI: (SINTESIS DE LO OCURRIDO, EL QUE Y EL COMO DEL HECHO)</td>
+        </tr>
+        <tr>
+          <td colspan="10" style="color: red; padding: 10px; white-space: pre-wrap;">${modusOperandiStr}</td>
+        </tr>
+        <tr>
+          <td colspan="10" style="background-color: #d9e1f2; font-weight: bold; text-align: center; padding: 2px;">LUGAR DE HALLAZGO O TIPO DE HABITACION</td>
+        </tr>
+        <tr>
+          <td colspan="10" style="color: red; text-align: center; padding: 2px;">INTERIOR DEL DOMICILIO</td>
+        </tr>
+        <tr>
+          <td colspan="5" style="background-color: #d9e1f2; font-weight: bold; text-align: center; padding: 2px;">MOVIL (POR QUE O PARA QUE)</td>
+          <td colspan="5" style="background-color: #d9e1f2; font-weight: bold; text-align: center; padding: 2px;">DETALLE MOVIL</td>
+        </tr>
+        <tr>
+          <td colspan="5" style="color: red; text-align: center; padding: 2px;">-</td>
+          <td colspan="5" style="color: red; text-align: center; padding: 2px;">-</td>
+        </tr>
+        <tr>
+          <td colspan="4" style="background-color: #d9e1f2; font-weight: bold; padding: 2px; text-align: center;">DATO DE ATENCION DE URGENCIA Nº</td>
+          <td colspan="1" style="color: red; text-align: center; padding: 2px;">-</td>
+          <td colspan="2" style="background-color: #d9e1f2; font-weight: bold; padding: 2px; text-align: center;">FECHA</td>
+          <td colspan="1" style="color: red; text-align: center; padding: 2px;">-</td>
+          <td colspan="1" style="background-color: #d9e1f2; font-weight: bold; padding: 2px; text-align: center;">HORA</td>
+          <td colspan="1" style="color: red; text-align: center; padding: 2px;">-</td>
+        </tr>
+        <tr>
+          <td colspan="4" style="background-color: #d9e1f2; font-weight: bold; padding: 2px; text-align: center;">DIAGNOSTICO</td>
+          <td colspan="6" style="color: red; text-align: center; padding: 2px;">-</td>
+        </tr>
+        <tr>
+          <td colspan="2" style="background-color: #d9e1f2; font-weight: bold; padding: 2px; text-align: center;">EXAMEN FINALIZADO</td>
+          <td colspan="2" style="color: red; text-align: center; padding: 2px;">${appState.horaFinExamenExterno || '-'}</td>
+          <td colspan="1" style="color: red; text-align: center; padding: 2px;">HORAS</td>
+          <td colspan="2" style="background-color: #d9e1f2; font-weight: bold; padding: 2px; text-align: center;">DATA DE MUERTE</td>
+          <td colspan="3" style="color: red; text-align: center; padding: 2px;">${appState.dataMuerte || '-'}</td>
+        </tr>
+        <tr>
+          <td colspan="10" style="background-color: #d9e1f2; font-weight: bold; text-align: center; padding: 2px;">CAUSA PROBABLE DE MUERTE</td>
+        </tr>
+        <tr>
+          <td colspan="10" style="color: red; text-align: center; padding: 2px;">${causaTexto}</td>
+        </tr>
+        <tr>
+          <td colspan="10" style="background-color: #d9e1f2; font-weight: bold; text-align: center; padding: 2px;">PROTOCOLO DE AUTOPSIA SERVICIO MEDICO LEGAL:</td>
+        </tr>
+        <tr>
+          <td colspan="10" style="color: red; text-align: center; padding: 2px;">-</td>
+        </tr>
+        <tr>
+          <td colspan="9" style="background-color: #d9e1f2; font-weight: bold; text-align: center; padding: 2px;">EXISTE RELACION DE LA/S VICTIMA/S CON IMPUTADO/S:</td>
+          <td colspan="1" style="padding: 2px;"></td>
+        </tr>
+        <tr>
+          <td colspan="10" style="color: red; text-align: center; padding: 2px;">-</td>
+        </tr>
+        <tr>
+          <td colspan="9" style="background-color: #d9e1f2; font-weight: bold; text-align: center; padding: 2px;">HECHO DE CONNOTACION MEDIATICO O SOCIAL:</td>
+          <td colspan="1" style="padding: 2px;"></td>
+        </tr>
+        <tr>
+          <td colspan="2" style="background-color: #d9e1f2; font-weight: bold; padding: 2px; text-align: center;">OTRO, SEÑALE:</td>
+          <td colspan="8" style="color: red; text-align: center; padding: 2px;">-</td>
+        </tr>
+      </table>
+      
+      <div style="margin-top: 80px; display: flex; justify-content: flex-start; align-items: flex-end; gap: 20px;">
+        <div style="width: 80%;">
+          <table style="width: 100%; border-collapse: collapse;" border="1" bordercolor="black">
+            <tr>
+              <td style="background-color: #92cddc; font-weight: bold; padding: 2px; text-align: center; width: 25%;">NOMBRE Y GRADO<br>JEFE DE UNIDAD</td>
+              <td style="color: red; padding: 2px; text-align: center; font-weight: bold; white-space: nowrap;">RODRIGO ACUÑA VALERIA<br>SUBPREFECTO<br>BRIGADA DE INVESTIGACIÓN CRIMINAL SAN JAVIER</td>
+              <td style="background-color: #92cddc; font-weight: bold; padding: 2px; text-align: center; width: 10%; vertical-align: middle;">FIRMA</td>
+            </tr>
+            <tr>
+              <td style="background-color: #92cddc; font-weight: bold; padding: 2px; text-align: center;">OFICIAL REDACTOR:</td>
+              <td style="color: red; padding: 2px; text-align: left;">${appState.comunicacion?.oficialACargo || 'OFICIAL A CARGO'}</td>
+            </tr>
+          </table>
+        </div>
+        <div style="flex: 1; border-bottom: 2px solid black; margin-bottom: 8px;"></div>
+      </div>
+
+      <div style="margin-top: 50px;">
+        <p style="font-weight: bold; margin-bottom: 5px; font-size: 9pt;">DISTRIBUCION:</p>
+        <table style="width: 30%; border-collapse: collapse;" border="1" bordercolor="black">
+          <tr><td style="padding: 2px 4px;">PM SUBDIPOL</td><td style="text-align: center; padding: 2px 4px;">1</td></tr>
+          <tr><td style="padding: 2px 4px;">REPOL MAULE</td><td style="text-align: center; padding: 2px 4px;">1</td></tr>
+          <tr><td style="padding: 2px 4px;">JENADEP</td><td style="text-align: center; padding: 2px 4px;">1</td></tr>
+          <tr><td style="padding: 2px 4px;">PM REPOL MAULE</td><td style="text-align: center; padding: 2px 4px;">1</td></tr>
+          <tr><td style="padding: 2px 4px;">PROLIN</td><td style="text-align: center; padding: 2px 4px;">1</td></tr>
+        </table>
+      </div>
+    </div>
+  `;
+  html = html.replace(/<td(.*?)color:\s*red;(.*?)>/gi, '<td contenteditable="true" $1color: red;$2>');
+  html = html.replace(/<span(.*?)color:\s*red;(.*?)>/gi, '<span contenteditable="true" $1color: red;$2>');
+  el.innerHTML = html.toUpperCase();
 }
 
 function exportToJPG() {
@@ -948,12 +1455,26 @@ function exportToJPG() {
     showToast('⚠️ Cargando generador de imagen JPG...');
     return;
   }
+  
+  const redElements = [];
+  el.querySelectorAll('*').forEach(node => {
+    if (node.style.color === 'red') {
+      node.style.color = 'black';
+      redElements.push(node);
+    }
+  });
+
+  const tc = document.getElementById('toastContainer');
+  if (tc) tc.style.display = 'none';
+
   showToast('🖼️ Generando imagen JPG del informe forense...');
   html2canvas(el, {
     scale: 2,
     backgroundColor: '#ffffff',
     useCORS: true
   }).then(canvas => {
+    redElements.forEach(node => node.style.color = 'red');
+    if (tc) tc.style.display = '';
     const link = document.createElement('a');
     link.download = `INFORME_SITIO_SUCESO_BICRIM_${appState.id || 'SS'}.jpg`;
     link.href = canvas.toDataURL('image/jpeg', 0.95);
@@ -962,6 +1483,8 @@ function exportToJPG() {
     const modal = document.getElementById('modalExportPdfJpg');
     if (modal) modal.style.display = 'none';
   }).catch(err => {
+    redElements.forEach(node => node.style.color = 'red');
+    if (tc) tc.style.display = '';
     showToast('⚠️ Error al generar imagen JPG');
   });
 }
@@ -973,26 +1496,216 @@ function exportToPDF() {
   const modal = document.getElementById('modalExportPdfJpg');
   if (modal) modal.style.display = 'none';
 
+  const redElements = [];
+  el.querySelectorAll('*').forEach(node => {
+    if (node.style.color === 'red') {
+      node.style.color = 'black';
+      redElements.push(node);
+    }
+  });
+
+  const tc = document.getElementById('toastContainer');
+  if (tc) tc.style.display = 'none';
+
   showToast('📄 Generando archivo PDF del informe oficial...');
 
   const opt = {
     margin:       [10, 10, 10, 10],
     filename:     `INFORME_SITIO_SUCESO_BICRIM_${appState.id || 'SS'}.pdf`,
-    image:        { type: 'jpeg', quality: 0.98 },
-    html2canvas:  { scale: 2, useCORS: true, backgroundColor: '#ffffff' },
-    jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+    image:        { type: 'jpeg', quality: 1 },
+    html2canvas:  { scale: 4, useCORS: true, backgroundColor: '#ffffff', letterRendering: true },
+    jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' },
+    pagebreak:    { mode: ['css', 'legacy'] }
   };
 
   if (typeof html2pdf !== 'undefined') {
     html2pdf().set(opt).from(el).save().then(() => {
+      redElements.forEach(node => node.style.color = 'red');
+      if (tc) tc.style.display = '';
       showToast('✅ Documento PDF guardado y descargado con éxito');
     }).catch(err => {
+      redElements.forEach(node => node.style.color = 'red');
+      if (tc) tc.style.display = '';
       showToast('⚠️ Error al generar PDF, abriendo impresión nativa...');
       window.print();
     });
   } else {
+    redElements.forEach(node => node.style.color = 'red');
     window.print();
   }
+}
+
+// EXPORTACIÓN DE LA FICHA INFORMATIVA A PDF
+function exportFichaToPDF() {
+  try {
+    const el = document.getElementById('fichaInformativaContent');
+    const wrapper = document.getElementById('FICHAINFORMATIVAWRAPPER') || document.getElementById('fichaInformativaWrapper');
+    
+    if (!el || !wrapper) {
+      alert("Error: No se encontró el contenedor de la ficha.");
+      return;
+    }
+
+    const tc = document.getElementById('toastContainer');
+    if (tc) tc.style.display = 'none';
+
+    showToast('📄 Preparando Ficha Informativa PDF...');
+
+    const redElements = [];
+    const tablesToFix = [];
+    
+    wrapper.querySelectorAll('*').forEach(node => {
+      if (node.style.color === 'red') {
+        node.style.color = 'black';
+        redElements.push(node);
+      }
+      if (node.tagName === 'TABLE') {
+        tablesToFix.push({ el: node, oldShadow: node.style.boxShadow || '' });
+        // Sombra doble para arreglar el bug del borde derecho/inferior de html2canvas
+        node.style.boxShadow = '1px 0 0 0 black, 0 1px 0 0 black, inset -1px 0 0 0 black';
+      }
+    });
+
+    const originalZoom = el.style.zoom || '';
+    const originalMargin = el.style.margin || '';
+    const originalPadding = el.style.padding || '';
+    const originalWidth = el.style.width || '';
+    const originalMaxWidth = el.style.maxWidth || '';
+    const originalFontSize = wrapper.style.fontSize;
+    
+    // VOLVEMOS A LA CONFIGURACIÓN EXACTA
+    el.style.zoom = '1';
+    el.style.margin = '0 auto';
+    // Quitamos el padding izquierdo para maximizar espacio, mantenemos 20px derecha para evitar corte
+    el.style.padding = '0 20px 0 0';
+    // 790px (tabla) + 20px = 810px
+    el.style.width = '810px';
+    el.style.maxWidth = '810px';
+    
+    // ACHICAMOS LA LETRA SOLO PARA EL PDF
+    wrapper.style.fontSize = '7.5pt';
+    const pTags = wrapper.querySelectorAll('p');
+    const oldPSizes = [];
+    pTags.forEach(p => {
+      oldPSizes.push(p.style.fontSize);
+      p.style.fontSize = '7.5pt';
+    });
+
+    // TRUCO MAESTRO 2: Forzamos el ancho de las columnas inyectando un Dummy Row
+    // Esto evita el bug de html2canvas que ignora los <colgroup> y colapsa las celdas derechas
+    const dummyRows = [];
+    const tablesPdf = wrapper.querySelectorAll('table');
+    tablesPdf.forEach(t => {
+      const colgroup = t.querySelector('colgroup');
+      if (colgroup) {
+        const cols = colgroup.querySelectorAll('col');
+        if (cols.length > 0) {
+          const dummyRow = document.createElement('tr');
+          dummyRow.style.height = '0px';
+          dummyRow.style.lineHeight = '0px';
+          dummyRow.style.visibility = 'hidden';
+          dummyRow.style.border = 'none';
+          cols.forEach(col => {
+            const td = document.createElement('td');
+            td.style.width = col.style.width;
+            td.style.padding = '0';
+            td.style.border = 'none';
+            td.style.height = '0px';
+            dummyRow.appendChild(td);
+          });
+          const tbody = t.querySelector('tbody') || t;
+          tbody.insertBefore(dummyRow, tbody.firstChild);
+          dummyRows.push(dummyRow);
+        }
+      }
+    });
+
+    const wrapperParent = el.parentElement;
+    const originalScrollLeft = wrapperParent ? wrapperParent.scrollLeft : 0;
+    const originalOverflow = wrapperParent ? wrapperParent.style.overflow : '';
+    const originalOverflowX = wrapperParent ? wrapperParent.style.overflowX : '';
+    
+    if (wrapperParent) {
+      wrapperParent.scrollLeft = 0;
+      wrapperParent.style.overflow = 'visible';
+      wrapperParent.style.overflowX = 'visible';
+    }
+
+    const opt = {
+      margin:       5,
+      filename:     `FICHA_INFORMATIVA_CONCURRENCIA_${appState.id || 'SS'}.pdf`,
+      image:        { type: 'jpeg', quality: 1 },
+      html2canvas:  { 
+        scale: 4, 
+        useCORS: true, 
+        backgroundColor: '#ffffff', 
+        letterRendering: true
+      },
+      jsPDF:        { unit: 'mm', format: 'legal', orientation: 'portrait' },
+      pagebreak:    { mode: ['css', 'legacy'] }
+    };
+
+    setTimeout(() => {
+      const restoreUI = () => {
+        redElements.forEach(node => node.style.color = 'red');
+        tablesToFix.forEach(item => item.el.style.boxShadow = item.oldShadow);
+        el.style.zoom = originalZoom;
+        el.style.margin = originalMargin;
+        el.style.padding = originalPadding;
+        el.style.width = originalWidth;
+        el.style.maxWidth = originalMaxWidth;
+        wrapper.style.fontSize = originalFontSize;
+        pTags.forEach((p, idx) => {
+          p.style.fontSize = oldPSizes[idx];
+        });
+        dummyRows.forEach(row => row.remove());
+        if (wrapperParent) {
+          wrapperParent.style.overflow = originalOverflow;
+          wrapperParent.style.overflowX = originalOverflowX;
+          wrapperParent.scrollLeft = originalScrollLeft;
+        }
+        if (tc) tc.style.display = '';
+      };
+
+      if (typeof html2pdf !== 'undefined') {
+        html2pdf().set(opt).from(el).save().then(() => {
+          restoreUI();
+          showToast('✅ Ficha Informativa PDF guardada con éxito');
+        }).catch(err => {
+          restoreUI();
+          showToast('⚠️ Error al generar PDF, intente imprimir');
+          alert("Error al generar PDF: " + err);
+        });
+      } else {
+        restoreUI();
+        window.print();
+      }
+    }, 150);
+  } catch (err) {
+    alert("Excepción JS: " + err);
+    console.error(err);
+  }
+}
+
+// EXPORTACIÓN DE LA FICHA INFORMATIVA A WORD (.doc)
+function exportFichaToWord() {
+  const el = document.getElementById('fichaInformativaContent');
+  if (!el) return;
+
+  showToast('📄 Generando documento Word de la Ficha Informativa...');
+
+  const header = "<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'><head><meta charset='utf-8'><title>Ficha Informativa</title></head><body>";
+  const footer = "</body></html>";
+  const html = header + el.innerHTML + footer;
+  const blob = new Blob(['\\ufeff', html], { type: 'application/msword' });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = `FICHA_INFORMATIVA_CONCURRENCIA_${appState.id || 'SS'}.doc`;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  showToast('✅ Ficha Informativa Word descargada con éxito');
 }
 
 function generateProfessionalSummaryText() {
@@ -1177,8 +1890,8 @@ function generateReporteAmpliacionConcurrenciaText() {
 
   const reporte = `*REPORTE Y AMPLIACIÓN DE CONCURRENCIA*
 
-*UNIDAD: BICRIM SAN JAVIER* / ${fechaStr}
-*OFICIAL A CARGO: JORGE PINO AVILA*
+*UNIDAD: ${appState.unidadPolicial || 'BICRIM SAN JAVIER'}* / ${fechaStr}
+*OFICIAL A CARGO: ${appState.oficialCargo || 'JORGE PINO AVILA'}*
 
 ▪ *DELITO O HECHO:* ${delitoOHechoStr}
 
@@ -1218,56 +1931,7 @@ function sendQuickWhatsAppReport() {
   showToast('📲 Abriendo WhatsApp con Reporte y Ampliación de Concurrencia...');
 }
 
-function exportToWord() {
-  const el = document.getElementById('officialDocumentContent');
-  if (!el) return;
 
-  showToast('📄 Generando documento Word en mayúsculas...');
-
-  const clonedContent = el.cloneNode(true);
-  const walker = document.createTreeWalker(clonedContent, NodeFilter.SHOW_TEXT, null, false);
-  let node;
-  while (node = walker.nextNode()) {
-    if (node.nodeValue) {
-      node.nodeValue = node.nodeValue.toUpperCase();
-    }
-  }
-
-  const header = `<html xmlns:o='urn:schemas-microsoft-com:office:office' 
-        xmlns:w='urn:schemas-microsoft-com:office:word' 
-        xmlns='http://www.w3.org/TR/REC-html40'>
-        <head><meta charset='utf-8'><title>INFORME CIENTÍFICO TÉCNICO DEL SITIO DEL SUCESO</title>
-        <style>
-          body { font-family: 'Arial', sans-serif; font-size: 11pt; color: #0f172a; line-height: 1.5; text-transform: uppercase; }
-          .official-header { text-align: center; border-bottom: 2px solid #0f172a; padding-bottom: 12px; margin-bottom: 18px; }
-          .official-header h1 { font-size: 14pt; font-weight: bold; margin: 0; }
-          .official-tab-header { background-color: #0f172a; color: #ffffff; font-weight: bold; font-size: 11pt; padding: 8px; margin-top: 20px; margin-bottom: 12px; }
-          .official-section-title { background-color: #f1f5f9; color: #0f172a; font-weight: bold; font-size: 10.5pt; padding: 6px; border-left: 4px solid #0284c7; margin-top: 14px; margin-bottom: 8px; }
-          .official-line { margin-bottom: 6px; }
-          .official-label { font-weight: bold; color: #334155; }
-          table { width: 100%; border-collapse: collapse; margin-top: 8px; margin-bottom: 12px; }
-          th { background-color: #0f172a; color: #ffffff; padding: 6px; border: 1px solid #cbd5e1; }
-          td { border: 1px solid #cbd5e1; padding: 6px; }
-        </style>
-        </head><body>`;
-  const footer = "</body></html>";
-  const sourceHTML = header + clonedContent.innerHTML + footer;
-
-  const blob = new Blob(['\ufeff', sourceHTML], {
-    type: 'application/msword'
-  });
-
-  const url = URL.createObjectURL(blob);
-  const link = document.createElement('a');
-  link.href = url;
-  link.download = `INFORME_SITIO_SUCESO_BICRIM_${appState.fallecido?.run || appState.id || 'CASO'}.doc`;
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
-  URL.revokeObjectURL(url);
-
-  showToast('✅ Documento Word descargado con éxito');
-}
 
 // INICIALIZADOR GENERAL
 document.addEventListener('DOMContentLoaded', () => {
@@ -1338,6 +2002,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   document.getElementById('btnSendReportWhatsAppQuick')?.addEventListener('click', sendQuickWhatsAppReport);
+  document.getElementById('btnSendReportWhatsAppHeader')?.addEventListener('click', sendQuickWhatsAppReport);
 
   document.querySelectorAll('.tab-btn').forEach(btn => {
     btn.addEventListener('click', () => {
@@ -1390,7 +2055,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   document.getElementById('btnExportReportPDF')?.addEventListener('click', exportToPDF);
-  document.getElementById('btnExportReportWord')?.addEventListener('click', exportToWord);
+  document.getElementById('btnExportFichaPDF')?.addEventListener('click', exportFichaToPDF);
 
   const btnExportJson = document.getElementById('btnExportJson');
   const modalBackupJson = document.getElementById('modalBackupJson');
