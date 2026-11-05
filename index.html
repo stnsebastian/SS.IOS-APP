@@ -11,8 +11,9 @@
   <link rel="manifest" href="manifest.json">
   <title>SIF-SS // Sistema Integral Forense - Sitio del Suceso (Versión Móvil iPhone / iOS)</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-  <link rel="stylesheet" href="styles.css?v=5.13">
+  <link rel="stylesheet" href="styles.css?v=5.48">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 </head>
 <body>
 
@@ -1398,12 +1399,14 @@
   <div id="toastContainer" class="toast-container" data-html2canvas-ignore="true"></div>
 
   <!-- SCRIPTS -->
-  <script src="app.js?v=5.13"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <script src="app.js?v=5.48"></script>
   <script>
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
-        navigator.serviceWorker.register('./sw.js?v=5.13')
-          .then(reg => console.log('✅ [iOS PWA] Service Worker registrado para iPhone Offline v5.13:', reg.scope))
+        navigator.serviceWorker.register('./sw.js?v=5.48')
+          .then(reg => console.log('✅ [iOS PWA] Service Worker registrado para iPhone Offline v5.48:', reg.scope))
           .catch(err => console.error('❌ [iOS PWA] Error al registrar SW:', err));
       });
     }

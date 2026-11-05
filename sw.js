@@ -1,4 +1,4 @@
-const CACHE_NAME = 'sif-ss-iphone-v5.13';
+const CACHE_NAME = 'sif-ss-iphone-v5.48';
 const LOCAL_ASSETS = [
   './',
   './index.html',
